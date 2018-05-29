@@ -45,6 +45,9 @@ function setup() {
 		}
 	}
 	
+	for (var k = 0; k < colourList.length; k++) {
+		enableButton(colourList[k]);
+	}
 	
 	for (i = 0; i < gridSize; i++) { //  creates the grid of squares
 		squares.push([]);
