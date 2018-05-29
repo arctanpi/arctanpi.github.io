@@ -1,0 +1,16 @@
+button {
+    border: black;
+	height: 50px;
+	width: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	background-color: #aaaaaa;
+	color: #0d0d0d;
+}
+
+canvas { 
+    border: 1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
