@@ -2,21 +2,21 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="stylesheet" type="text/css" href="assets/css/index.css">
+<link rel="stylesheet" type="text/css" href="assets/main/css/index.css">
 </head>
 <body>
-	
+
 	<div id = "gameWindow" style="text-align:center; display:none">
-	
+
 	<canvas id="myCanvas" width="10" height="10" style="border:1px solid #000000;"></canvas>
-		
+
 	<br>
 	<br>
 	<br>
-		
-	</div> 
-	
-	
+
+	</div>
+
+
 	<div id = "menu" style="text-align:center">
 		<br>
 		<br>
@@ -31,52 +31,56 @@
 		<button id = "options" onclick = "displayOptions()" style = "width:120px"> options </button>
 		<br>
 		<br>
-		
+		<br>
+		<button onclick="window.location.href='main.html';" style = "width:120px;vertical-align:middle">
+		  back
+		</button>
+
 	</div>
-	
-	
+
+
 	<div id = "buttons" style="text-align:center;">
-	
-	
-	
+
+
+
 	</div>
-	
+
 	<br>
-	
+
 	<div id = "clicks" style="text-align:center;display:none">
 		<br>
-		
+
 		<p> clicks: 0 </p>
 	</div>
-	
-	
-	
-	
+
+
+
+
 	<div id = "singlePlayerButtons" style = "text-align:center;display:none">
 		<br>
 		<button id="startNewSingle" onclick = "newGame(1)" style = "width:100px"> restart </button>
 		<button id="returnToMenuSingle" onclick = "returnToMenuSingle()" style = "width:100px"> menu </button>
 	</div>
-	
+
 	<br>
-	
+
 	<div id = "score" style = "display:none; text-align:center">
 		<button id = "playerOneColour" style = "height:20px;width:20px;vertical-align:middle"></button>
 		<p1 id = "scoreWords" style = "inline-block"> 1:1 </p1>
 		<button id = "playerTwoColour" style = "height:20px;width:20px;vertical-align:middle"></button>
 	</div>
-	
+
 	<br>
-	
+
 	<div id = "twoPlayerButtons" style = "text-align:center;display:none">
 		<button id="startNewTwo" onclick = "newGame(2)" style = "width:100px"> restart </button>
 		<button id="returnToMenuTwo" onclick = "returnToMenuTwo()" style = "width:100px"> menu </button>
 	</div>
-	
-	
-	
+
+
+
 	<div id = "optionsMenu" style = "text-align:center; display:none">
-		grid size: <select id = "chosenSize"> 
+		grid size: <select id = "chosenSize">
 			<option value = "10">10 x 10</option>
 			<option value = "25">25 x 25</option>
 			<option value = "40">40 x 40</option>
@@ -84,12 +88,12 @@
 		<br>
 		<br>
 	</div>
-	
-	
+
+
 	<div id = "optionsButtons" style = "text-align:center;display:none">
 		<button id="returnToMenuOptions" onclick = "returnToMenuOptions()" style = "width:100px"> menu </button>
 	</div>
-	
+
 	<!--
 	<select id = "chosenColours">
 		<option value = "3">3</option>
@@ -98,15 +102,15 @@
 		<option value = "6">6</option>
 	</select>
 	-->
-	
-	
-	
-	
-	<script src = "assets/js/gameMain.js"></script>
-	<script src = "assets/js/singlePlayer.js"></script>
-	<script src = "assets/js/twoPlayer.js"></script>
-	<script src = "assets/js/options.js"></script>
-	
-	
+
+
+
+
+	<script src = "assets/chroma-squares/js/gameMain.js"></script>
+	<script src = "assets/chroma-squares/js/singlePlayer.js"></script>
+	<script src = "assets/chroma-squares/js/twoPlayer.js"></script>
+	<script src = "assets/chroma-squares/js/options.js"></script>
+
+
 </body>
 </html>
