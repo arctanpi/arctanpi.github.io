@@ -1,0 +1,32 @@
+<!DOCTYPE html,>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+
+	<div id = "gameWindow" style="text-align:center">
+
+	<canvas id="gameZone" width="500" height="500" style="border:1px solid #000000;"></canvas>
+
+	<br>
+	<br>
+
+  <button id="newGridButton" onclick = "makeCurrentGridRandom()" style = "width:100px"> new random </button>
+
+	<br>
+	<br>
+
+  <button id="forwardOneStepButton" onclick = "forwardOneStep()" style = "width:100px"> +1 frame </button>
+  <button id="startForwardButton" onclick = "play(100)" style = "width:100px"> go med </button>
+  <button id="startForwardButton" onclick = "play(50)" style = "width:100px"> go fast </button>
+	<button id="stopForwardButton" onclick = "play(0)" style = "width:100px"> stop </button>
+
+	</div>
+
+  <script src = "assets/rps.js"></script>
+
+	<p id="demo"></p>
+</body>
+</html>
