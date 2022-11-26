@@ -18,15 +18,36 @@
 	<br>
 	<br>
 
-  <button id="forwardOneStepButton" onclick = "forwardOneStep()" style = "width:100px"> +1 frame </button>
-  <button id="startForwardButton" onclick = "play(100)" style = "width:100px"> go med </button>
-  <button id="startForwardButton" onclick = "play(50)" style = "width:100px"> go fast </button>
-	<button id="stopForwardButton" onclick = "play(0)" style = "width:100px"> stop </button>
+  <button id="forwardOneStepButton" onclick = "forwardOneStep(currentGame)" style = "width:100px"> +1 frame </button>
+  <button id="startForwardButton" onclick = "play(currentGame,100)" style = "width:100px"> go med </button>
+  <button id="startForwardButton" onclick = "play(currentGame,50)" style = "width:100px"> go fast </button>
+	<button id="stopForwardButton" onclick = "play(currentGame,0)" style = "width:100px"> stop </button>
+
+	<br>
+	<br>
+
+	<p id="vortNum" ># vortices: 10</p>
+
+	<br>
+
+	<button id="displayVortsButton" onclick = "toggleDisplayVorts(currentGame)" style = "width:100px"> show vorts </button>
+	<br>
+	<br>
+	<label for = "customLevelInput">Input custom grid: </label>
+	<input type = "text" id = "customLevelInput">
+	<button id = "getCustomLevel", onclick = "getCustomLevel()"> get </button>
+	<button id = "setCustomLevel", onclick = "setCustomLevel()"> set </button>
+
+
+	<p id = "loopFound", style = "visibility: hidden" > no loop yet you sneaky html viewer </p>
+	<p id = "timeTillLoop", style = "visibility : hidden"> get outta here! </p>
+
+
 
 	</div>
 
   <script src = "assets/rps.js"></script>
 
-	<p id="demo"></p>
+
 </body>
 </html>

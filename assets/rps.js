@@ -12,9 +12,6 @@ var stopped = true;
 
 
 
-var currentGame = {};
-
-
 
 //
 
@@ -47,6 +44,22 @@ function vortNb(x,y,N) {
          ]
 }
 
+
+function compareGrids(g1,g2) {
+  var same = true
+  for (var i = 0; i < g1.length; i++) {
+    for (var j = 0; j < g1.length; j++) {
+      if (g1[i][j] != g2[i][j]) {
+        same = false
+        break
+      }
+    }
+    if (!same) {
+      break
+    }
+  }
+  return same
+}
 
 function isVort(grid,x,y) {
   var neb = vortNb(x,y,grid.length)
@@ -102,99 +115,213 @@ function updateCell(grid,i,j){
 }
 
 
-function nextGrid(grid){
-  var size = grid.length
-  var new_grid = []
-  for (var i = 0; i < size; i++){
-    var new_row = []
-    for (var j = 0; j < size; j++){
-      new_row.push(updateCell(grid,i,j))
-    }
-    new_grid.push(new_row)
-  }
-  return new_grid
-}
-
-
-
-function drawGrid(grid){
-  var len = grid.length
+function getVorts(grid) {
   var vorts = []
-  for (var i = 0; i < len; i++){
-    for (var j =0; j < len; j++) {
-      ctx.beginPath();
-    	ctx.fillStyle = colours[grid[i][j]];
-    	ctx.fillRect(cS*i,cS*j,cS,cS);
-
+  for (var i = 0; i < gridSize; i++){
+    for (var j =0; j < gridSize; j++) {
       if (isVort(grid,i,j)) {
         vorts.push([i,j])
       }
     }
   }
-  for (var i = 0; i < vorts.length; i++) {
-    ctx.fillStyle = "#000000"
-    ctx.beginPath();
-    ctx.arc(cS*vorts[i][0], cS*vorts[i][1], cS/3, 0, 2 * Math.PI);
-    ctx.fill();
+  return vorts
+}
 
-    if (vorts[i][0] == 0 || vorts[i][0] == gridSize) {
-      ctx.beginPath();
-      ctx.arc(500-vorts[i][0], cS*vorts[i][1], cS/3, 0, 2 * Math.PI);
-      ctx.fill();
+
+function nextGrid(game){
+  var size = game.grid.length
+  var new_grid = []
+  for (var i = 0; i < size; i++){
+    var new_row = []
+    for (var j = 0; j < size; j++){
+      new_row.push(updateCell(game.grid,i,j))
     }
-    if (vorts[i][1] == 0 || vorts[i][1] == gridSize) {
+    new_grid.push(new_row)
+  }
+
+  game.grid = new_grid
+  game.vorts = getVorts(new_grid)
+  return game
+
+}
+
+
+
+function drawGrid(game){
+  var grid = game.grid
+  var len = grid.length
+  for (var i = 0; i < len; i++){
+    for (var j =0; j < len; j++) {
       ctx.beginPath();
-      ctx.arc(cS*vorts[i][0], 500-vorts[i][1], cS/3, 0, 2 * Math.PI);
-      ctx.fill();
+    	ctx.fillStyle = colours[grid[i][j]];
+    	ctx.fillRect(cS*i,cS*j,cS,cS);
     }
   }
+  vorts = game.vorts
+  if (game.displayVorts) {
+    for (var i = 0; i < vorts.length; i++) {
+      ctx.fillStyle = "#000000"
+      ctx.beginPath();
+      ctx.arc(cS*vorts[i][0], cS*vorts[i][1], cS/3, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // draws vortices on the edges of the window
+      if (vorts[i][0] == 0 || vorts[i][0] == gridSize) {
+        ctx.beginPath();
+        ctx.arc(500-vorts[i][0], cS*vorts[i][1], cS/3, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+      if (vorts[i][1] == 0 || vorts[i][1] == gridSize) {
+        ctx.beginPath();
+        ctx.arc(cS*vorts[i][0], 500-vorts[i][1], cS/3, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+  }
+  return game
 }
 
 
 
 function makeCurrentGridRandom(){
-  currentGrid = randomGrid(currentGrid.length)
-  drawGrid(currentGrid)
+
+  currentGame.grid = randomGrid(gridSize)
+
+  currentGame.vorts = getVorts(currentGame.grid)
+  vortNum.innerHTML = "# vortices: " + currentGame.vorts.length.toString()
+
+  currentGame.frames = [currentGame.grid]
+  currentGame.loopFound = false
+  currentGame.loopLength = -1
+  document.getElementById("loopFound").style.visibility = "hidden"
+  document.getElementById("timeTillLoop").style.visibility = "hidden"
+
+  drawGrid(currentGame)
+  stopForward()
 }
 
 
 function forwardOneStep(game){
-  currentGrid = nextGrid(currentGrid)
-  drawGrid(currentGrid)
+  game.grid = nextGrid(game).grid
+  game.frames.push(game.grid)
+  vortNum.innerHTML = "# vortices: " + game.vorts.length.toString();
+  drawGrid(game)
+
+  if (!game.loopFound) {
+    for (var i = 0; i < game.frames.length-1; i++) {
+      if (compareGrids(game.grid,game.frames[i])) {
+        document.getElementById("loopFound").style.visibility = "visible"
+        game.loopFound = true
+        game.loopLength = game.frames.length - i - 1
+        loopFound.innerHTML = "loop length: " + game.loopLength.toString()
+
+        document.getElementById("timeTillLoop").style.visibility = "visible"
+        timeTillLoop.innerHTML = "time until loop: " + (game.frames.length - game.loopLength - 1).toString()
+      }
+    }
+  }
+
+
+  return game
 }
 
 
-
-
-
-// seeting up the game variables
-
-var currentGrid = randomGrid(gridSize)
-currentGame.grid = currentGrid
-currentGame.active = false
-drawGrid(currentGame.grid)
-
-
-
-var play = function(speed) {
-  clearTimeout(currentGame.time);
+// this makes the world go around
+var play = function(game,speed) {
+  clearTimeout(game.time);
   if (speed == 0) {
     return ;
   } else {
     var delay = speed;
-    forwardOneStep()
-    currentGame.grid = currentGrid;
-    currentGame.time = setTimeout(function () {
-      play(speed);
+    game = forwardOneStep(game)
+    game.time = setTimeout(function () {
+      play(game,speed);
     }, delay);
   }
 }
 
 
 
-
+// this stops the world going round
 function stopForward(){
   clearTimeout(gameClock)
+}
+
+
+function toggleDisplayVorts(game) {
+  game.displayVorts = !game.displayVorts
+  drawGrid(game)
+  if (game.displayVorts) {
+    displayVortsButton.innerHTML = "hide vorts"
+  } else {
+    displayVortsButton.innerHTML = "show vorts"
+  }
+}
+
+
+// setting up the game variables
+
+var currentGame = {};
+currentGame.displayVorts = true;
+
+currentGame.grid = randomGrid(gridSize)
+
+currentGame.vorts = getVorts(currentGame.grid)
+vortNum.innerHTML = "# vortices: " + currentGame.vorts.length.toString()
+
+currentGame.frames = [currentGame.grid]
+currentGame.loopFound = false
+currentGame.loopLength = -1
+
+drawGrid(currentGame)
+
+
+
+function getCustomLevel() {
+  str = "[";
+  for (var i = 0; i < gridSize; i++) {
+    str += "["
+    for (var j = 0; j < gridSize; j++) {
+      if (j != gridSize-1) {
+        str+= currentGame.grid[i][j].toString() + ","
+      } else {
+        str+= currentGame.grid[i][j].toString()
+      }
+    }
+    if (i != gridSize-1) {
+      str += "],"
+    } else {
+      str += "]"
+    }
+
+  }
+  str += "]"
+  document.getElementById('customLevelInput').value = str;
+}
+
+
+
+function setCustomLevel() {
+  var newGame = {};
+  newGame.displayVorts = currentGame.displayVorts;
+
+  gridStr = document.getElementById('customLevelInput').value
+  newGame.grid = JSON.parse(gridStr)
+
+  newGame.vorts = getVorts(newGame.grid)
+  vortNum.innerHTML = "# vortices: " + newGame.vorts.length.toString()
+
+  newGame.frames = [newGame.grid]
+  newGame.loopFound = false
+  newGame.loopLength = -1
+
+  drawGrid(newGame)
+
+  document.getElementById("loopFound").style.visibility = "hidden"
+  document.getElementById("timeTillLoop").style.visibility = "hidden"
+
+  currentGame = newGame
+  play(currentGame,0)
 }
 
 
